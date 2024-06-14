@@ -13,10 +13,7 @@ import {
 
 export function WeekPicker({ className, onUpdate }) {
   const today = new Date();
-  const [selectedWeek, setSelectedWeek] = useState({
-    from: startOfWeek(today),
-    to: endOfWeek(today),
-  });
+  const [selectedWeek, setSelectedWeek] = useState(undefined);
 
   return (
     <div className={cn("grid gap-2", className)}>
