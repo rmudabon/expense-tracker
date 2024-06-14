@@ -17,6 +17,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import { tableColumns } from "./columns";
 import { NewExpenseForm } from "../new-expense-form";
@@ -40,11 +41,18 @@ export function ExpenseTable() {
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     state: {
       columnFilters,
     },
     initialState: {
       pagination,
+      sorting: [
+        {
+          id: "date",
+          asc: true, // sort by name in descending order by default
+        },
+      ],
     },
   });
 
@@ -59,6 +67,10 @@ export function ExpenseTable() {
     style: "currency",
     currency: "PHP",
   }).format(totalAmount);
+
+  const updateWeekFilter = (weekRange) => {
+    table.getColumn("date").setFilterValue(weekRange);
+  };
 
   const updateData = useCallback(() => {
     setData(JSON.parse(localStorage.getItem(EXPENSE_KEY)));
@@ -83,7 +95,7 @@ export function ExpenseTable() {
               table.getColumn("description").setFilterValue(event.target.value)
             }
           />
-          <WeekPicker />
+          <WeekPicker onUpdate={updateWeekFilter} />
         </div>
         <NewExpenseForm />
       </div>

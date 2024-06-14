@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, isWithinInterval } from "date-fns";
 
 export const tableColumns = [
   {
@@ -6,6 +6,15 @@ export const tableColumns = [
     header: "Date",
     cell: ({ row }) => {
       return <div>{format(new Date(row.getValue("date")), "MM/dd/yyyy")}</div>;
+    },
+    filterFn: (row, _, filterValue) => {
+      if (!filterValue) {
+        return true;
+      }
+      return isWithinInterval(row.getValue("date"), {
+        start: filterValue.from,
+        end: filterValue.to,
+      });
     },
   },
   {

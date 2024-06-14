@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function WeekPicker({ className }) {
+export function WeekPicker({ className, onUpdate }) {
   const today = new Date();
   const [selectedWeek, setSelectedWeek] = useState({
     from: startOfWeek(today),
@@ -31,34 +31,37 @@ export function WeekPicker({ className }) {
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {selectedWeek.from ? (
+            {selectedWeek !== undefined ? (
               <>
                 {format(selectedWeek.from, "MM/dd/yyyy")} -{" "}
                 {format(selectedWeek.to, "MM/dd/yyyy")}
               </>
             ) : (
-              <span>Pick a week</span>
+              <span>Filter by week...</span>
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0" align="end">
           <Calendar
             initialFocus
             modifiers={{
               selected: selectedWeek,
             }}
+            disabled={{
+              after: today,
+            }}
             onDayClick={(day, modifiers) => {
               if (modifiers.selected) {
-                setSelectedWeek({
-                  from: startOfWeek(today),
-                  to: endOfWeek(today),
-                });
+                setSelectedWeek(undefined);
+                onUpdate(undefined);
                 return;
               }
-              setSelectedWeek({
+              const weekRange = {
                 from: startOfWeek(day),
                 to: endOfWeek(day),
-              });
+              };
+              setSelectedWeek(weekRange);
+              onUpdate(weekRange);
             }}
             numberOfMonths={2}
           />
