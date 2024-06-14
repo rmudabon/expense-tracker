@@ -56,17 +56,30 @@ export function ExpenseTable() {
     },
   });
 
+  const overallAmounts = table
+    .getPrePaginationRowModel()
+    .rows.map((row) => row.getValue("amount"));
   const amounts = table.getRowModel().rows.map((row) => row.getValue("amount"));
 
-  const totalAmount = amounts.reduce(
+  const subTotal = amounts.reduce(
     (currentSum, currentExpense) => currentSum + currentExpense,
     INITIAL_VALUE
   );
 
+  const grandTotal = overallAmounts.reduce(
+    (currentSum, currentExpense) => currentSum + currentExpense,
+    INITIAL_VALUE
+  );
+
+  const formattedSubTotal = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "PHP",
+  }).format(subTotal);
+
   const formattedTotal = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "PHP",
-  }).format(totalAmount);
+  }).format(grandTotal);
 
   const updateWeekFilter = (weekRange) => {
     table.getColumn("date").setFilterValue(weekRange);
@@ -142,7 +155,13 @@ export function ExpenseTable() {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell>Total</TableCell>
+              <TableCell>Sub-Total</TableCell>
+              <TableCell colSpan={2} className="text-right">
+                {formattedSubTotal}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Grand Total</TableCell>
               <TableCell colSpan={2} className="text-right">
                 {formattedTotal}
               </TableCell>
