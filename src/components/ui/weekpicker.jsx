@@ -16,7 +16,7 @@ export function WeekPicker({ className, onUpdate }) {
   const [selectedWeek, setSelectedWeek] = useState(undefined);
 
   return (
-    <div className={cn("grid gap-2", className)}>
+    <div className={cn("grid gap-2 w-full", className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
