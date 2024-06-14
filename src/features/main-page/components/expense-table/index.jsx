@@ -20,6 +20,7 @@ import {
 } from "@tanstack/react-table";
 import { tableColumns } from "./columns";
 import { NewExpenseForm } from "../new-expense-form";
+import { WeekPicker } from "@/components/ui/weekpicker";
 
 export function ExpenseTable() {
   const [expenseData, setData] = useState(
@@ -73,15 +74,17 @@ export function ExpenseTable() {
 
   return (
     <>
-      <div className="flex w-full items-center justify-between py-0 gap-2">
-        <Input
-          placeholder="Filter by description..."
-          value={table.getColumn("description").getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn("description").setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex w-full flex-col items-start justify-between py-0 gap-3 md:flex-row md:items-center">
+        <div className="flex flex-col items-start gap-3 w-full md:flex-row md:items-center">
+          <Input
+            placeholder="Filter by description..."
+            value={table.getColumn("description").getFilterValue() ?? ""}
+            onChange={(event) =>
+              table.getColumn("description").setFilterValue(event.target.value)
+            }
+          />
+          <WeekPicker />
+        </div>
         <NewExpenseForm />
       </div>
       <div className="border rounded-lg w-full">
