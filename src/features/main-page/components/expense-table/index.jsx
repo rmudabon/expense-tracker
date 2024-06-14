@@ -50,7 +50,7 @@ export function ExpenseTable() {
       sorting: [
         {
           id: "date",
-          asc: true, // sort by name in descending order by default
+          desc: true,
         },
       ],
     },
