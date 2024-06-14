@@ -2,23 +2,17 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { DatePickerFormControl } from "../date-picker-form-control";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import { useMaskito } from "@maskito/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { formSchema } from "@/validation-schemas/new-expense";
 
-const formSchema = z.object({
-    amount: z.coerce.number({
-        invalid_type_error: 'The amount inputted must be a valid number.',
-    }).multipleOf(0.01, 'Amount must not have more than 2 decimal places.').min(0.01, 'Amount must be greater than 0.'),
-    date: z.date({
-        required_error: 'Date is required.'
-    }),
-    description: z.string().min(1, 'Description is required.')
-})
+import currencyMask from '@/lib/input-masks'
+import { EXPENSE_KEY } from "@/constants/keys";
 
 export function NewExpenseForm() {
     const [open, setOpen] = useState(false);
@@ -32,11 +26,23 @@ export function NewExpenseForm() {
         }
     });
 
+    const currencyRef = useMaskito({
+        options: currencyMask
+    })
+
     const onSubmit = (values) => {
-        console.log(values);
+        const expenseData = JSON.parse(localStorage.getItem(EXPENSE_KEY));
+        const currentExpenses = expenseData ? expenseData : [];
+        const translatedValues = {
+            amount: values.amount,
+            date: values.date.toISOString(),
+            description: values.description
+        }
+        const newExpenses = [...currentExpenses, translatedValues];
+        localStorage.setItem(EXPENSE_KEY, JSON.stringify(newExpenses));
         toast({
             description: 'Your expense has been saved.'
-        })
+        });
         setOpen(false);
         form.reset();
     }
@@ -63,7 +69,15 @@ export function NewExpenseForm() {
                                             <FormControl>
                                                 <div className='flex flex-row'>
                                                     <p className='h-10 rounded-md rounded-r-none border font-medium bg-background px-3 py-2 text-sm'>PHP</p>
-                                                    <Input placeholder="in PHP" {...field} className='rounded-l-none border-l-0 flex-grow-1'/>
+                                                    <Input 
+                                                        placeholder="0.00" 
+                                                        {...field} 
+                                                        ref={currencyRef} 
+                                                        onInput={(event) => {
+                                                            form.setValue('amount', event.currentTarget.value)
+                                                        }} 
+                                                        className='rounded-l-none border-l-0 flex-grow-1'
+                                                    />
                                                 </div>
                                                 
                                             </FormControl>
