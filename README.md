@@ -1,8 +1,30 @@
-# React + Vite
+# CentTrak
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is an expense tracker using Vite and React that stores and retrieves data from localStorage.
 
-Currently, two official plugins are available:
+## Cloning
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To clone this repository from GitHub, you must have [Git](https://www.git-scm.com/downloads) installed and must execute the following command in your terminal:
+
+```
+git clone https://github.com/rmudabon/expense-tracker.git
+```
+
+## Running The Application Locally
+
+**Step 1**: After successful cloning, navigate to the repository folder and install all required npm dependencies in your terminal with these commands in order:
+
+```
+cd expense-tracker
+npm install
+```
+
+**Step 2**: Run the application in Vite's dev mode with the following command:
+
+```
+npm run dev
+```
+
+**Step 3**: Once Vite is up and running, go to the provided localhost link (typically http://localhost:5173/).
+
+**Step 4**: Tinker away!
