@@ -44,6 +44,11 @@ export function NewExpenseForm() {
     options: currencyMask,
   });
 
+  const handleOpenChange = (open) => {
+    form.reset();
+    setOpen(open);
+  };
+
   const onSubmit = (values) => {
     const expenseData = JSON.parse(localStorage.getItem(EXPENSE_KEY));
     const currentExpenses = expenseData ? expenseData : [];
@@ -63,7 +68,7 @@ export function NewExpenseForm() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button size="sm">New</Button>
       </DialogTrigger>
