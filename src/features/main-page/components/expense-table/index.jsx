@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,12 +12,18 @@ import { EXPENSE_KEY } from "@/constants/keys";
 import { format } from "date-fns";
 
 export function ExpenseTable() {
-  const expenseData = JSON.parse(localStorage.getItem(EXPENSE_KEY));
+  const [expenseData, setData] = useState(
+    JSON.parse(localStorage.getItem(EXPENSE_KEY))
+  );
   const INITIAL_VALUE = 0;
   const totalAmount = expenseData.reduce(
     (currentSum, currentExpense) => currentSum + currentExpense.amount,
     INITIAL_VALUE
   );
+
+  window.addEventListener("storageUpdate", () => {
+    setData(JSON.parse(localStorage.getItem(EXPENSE_KEY)));
+  });
 
   return (
     <div className="border rounded-lg w-full">

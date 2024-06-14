@@ -54,6 +54,7 @@ export function NewExpenseForm() {
     };
     const newExpenses = [...currentExpenses, translatedValues];
     localStorage.setItem(EXPENSE_KEY, JSON.stringify(newExpenses));
+    dispatchEvent(new Event("storageUpdate"));
     toast({
       description: "Your expense has been saved.",
     });
