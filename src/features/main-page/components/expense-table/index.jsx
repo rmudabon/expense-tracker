@@ -10,30 +10,47 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { EXPENSE_KEY } from "@/constants/keys";
+import { Input } from "@/components/ui/input";
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { tableColumns } from "./columns";
+import { NewExpenseForm } from "../new-expense-form";
 
 export function ExpenseTable() {
   const [expenseData, setData] = useState(
     JSON.parse(localStorage.getItem(EXPENSE_KEY))
   );
+  const [columnFilters, setColumnFilters] = useState([]);
   const INITIAL_VALUE = 0;
-  const totalAmount = expenseData.reduce(
-    (currentSum, currentExpense) => currentSum + currentExpense.amount,
-    INITIAL_VALUE
-  );
 
   const table = useReactTable({
     data: expenseData,
     columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      columnFilters,
+    },
   });
+
+  const amounts = table.getRowModel().rows.map((row) => row.getValue("amount"));
+
+  const totalAmount = amounts.reduce(
+    (currentSum, currentExpense) => currentSum + currentExpense,
+    INITIAL_VALUE
+  );
+
+  const formattedTotal = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "PHP",
+  }).format(totalAmount);
 
   const updateData = useCallback(() => {
     setData(JSON.parse(localStorage.getItem(EXPENSE_KEY)));
@@ -49,6 +66,17 @@ export function ExpenseTable() {
 
   return (
     <>
+      <div className="flex w-full items-center justify-between py-0">
+        <Input
+          placeholder="Filter description..."
+          value={table.getColumn("description").getFilterValue() ?? ""}
+          onChange={(event) =>
+            table.getColumn("description").setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <NewExpenseForm />
+      </div>
       <div className="border rounded-lg w-full">
         <Table>
           <TableHeader>
@@ -82,7 +110,7 @@ export function ExpenseTable() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={tableColumns.length}
                   className="h-24 text-center"
                 >
                   No expenses listed.
@@ -94,7 +122,7 @@ export function ExpenseTable() {
             <TableRow>
               <TableCell>Total</TableCell>
               <TableCell colSpan={2} className="text-right">
-                PHP {totalAmount}
+                {formattedTotal}
               </TableCell>
             </TableRow>
           </TableFooter>

@@ -84,7 +84,7 @@ export function NewExpenseForm() {
                       <FormControl>
                         <div className="flex flex-row">
                           <p className="h-10 rounded-md rounded-r-none border font-medium bg-background px-3 py-2 text-sm">
-                            PHP
+                            ₱
                           </p>
                           <Input
                             placeholder="0.00"
