@@ -1,5 +1,4 @@
 import { ExpenseTable } from "./components/expense-table";
-import { NewExpenseForm } from "./components/new-expense-form";
 
 export function MainPage() {
   return (

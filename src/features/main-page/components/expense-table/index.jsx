@@ -26,6 +26,10 @@ export function ExpenseTable() {
     JSON.parse(localStorage.getItem(EXPENSE_KEY))
   );
   const [columnFilters, setColumnFilters] = useState([]);
+  const pagination = {
+    pageSize: 7,
+    pageIndex: 0,
+  };
   const INITIAL_VALUE = 0;
 
   const table = useReactTable({
@@ -37,6 +41,9 @@ export function ExpenseTable() {
     getPaginationRowModel: getPaginationRowModel(),
     state: {
       columnFilters,
+    },
+    initialState: {
+      pagination,
     },
   });
 
@@ -66,9 +73,9 @@ export function ExpenseTable() {
 
   return (
     <>
-      <div className="flex w-full items-center justify-between py-0">
+      <div className="flex w-full items-center justify-between py-0 gap-2">
         <Input
-          placeholder="Filter description..."
+          placeholder="Filter by description..."
           value={table.getColumn("description").getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("description").setFilterValue(event.target.value)
@@ -128,7 +135,14 @@ export function ExpenseTable() {
           </TableFooter>
         </Table>
       </div>
-      <div className="w-full flex items-center justify-end space-x-2 py-4">
+      <div className="w-full flex items-center justify-end space-x-2 py-1">
+        <p className="leading-7 [&:not(:first-child)]:mt-6">
+          Page{" "}
+          <span className="font-medium">
+            {table.getState().pagination.pageIndex + 1}
+          </span>{" "}
+          of <span className="font-medium">{table.getPageCount()}</span>
+        </p>
         <Button
           variant="outline"
           size="sm"
