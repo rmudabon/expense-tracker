@@ -1,12 +1,17 @@
 import { NewExpenseForm } from "./components/new-expense-form";
 
 export function MainPage() {
-    return (
-            <main className='flex flex-col h-full items-center justify-center'>
-                <h1 className="font-sans scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                    CentTrak
-                </h1>
-                <NewExpenseForm />
-            </main>
-    )
+  return (
+    <main className="flex flex-col h-full items-center justify-center w-full max-w-5xl m-auto p-5 gap-6">
+      <h1 className="font-sans w-full scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        CentTrak
+      </h1>
+      <div className="flex flex-row w-full justify-between items-center">
+        <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+          Your Expenses
+        </h2>
+        <NewExpenseForm />
+      </div>
+    </main>
+  );
 }
