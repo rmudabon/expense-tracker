@@ -155,7 +155,7 @@ export function ExpenseTable() {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell>Sub-Total</TableCell>
+              <TableCell>Subtotal</TableCell>
               <TableCell colSpan={2} className="text-right">
                 {formattedSubTotal}
               </TableCell>
